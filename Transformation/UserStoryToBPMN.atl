@@ -1,0 +1,47 @@
+-- @path BPMN = /IDM_UStoBPMN/MetaModels/BPMN.ecore
+-- @path Backlog = /IDM_UStoBPMN/MetaModels/Backlog.ecore
+
+module UserStoryToBPMN;
+
+create OUT: BPMN from IN: Backlog;
+
+
+rule Role2Lane{
+	from B: Backlog!Role
+	to U: BPMN!Lane(
+		name <- B.name
+	)
+}
+
+
+
+
+rule Activity2Activity{
+	from B: Backlog!Activity
+	to U: BPMN!Activity(
+		name <- B.name
+	)
+}
+
+
+
+
+rule Backlog2BPMNModel{
+	from B: Backlog!Backlog
+	to U: BPMN!BPMNModel(
+		name <- B.name,
+		lanes <- B.userstories
+	)
+}
+
+
+
+rule UserStory2Associations{
+	from B: Backlog!UserStory
+	to U: BPMN!Lane(
+		activities <- B.activities,
+		activities <- B.roles
+	)
+}
+
+
